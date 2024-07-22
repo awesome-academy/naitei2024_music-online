@@ -7,10 +7,10 @@ import session from 'express-session';
 import flash from 'connect-flash';
 import router from './routes/index';
 import { AppDataSource } from './config/data-source';
-
+import { sessionMiddleware } from './middleware/sessionMiddleware';
 const app = express();
 
-i18next
+void i18next
   .use(Backend)
   .use(middleware.LanguageDetector)
   .init({
@@ -49,7 +49,8 @@ AppDataSource.initialize()
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-
+    app.use(express.static(path.join(__dirname, 'public')));
+    app.use(sessionMiddleware);
     app.use('/', router);
 
     app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
@@ -58,6 +59,7 @@ AppDataSource.initialize()
 
       res.status(500);
       res.render('error');
+      next();
     });
 
     const PORT = process.env.PORT;
