@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  header
+    h1= pageTitle
+
+  main
+    p Welcome to the #{pageTitle} page!
+    a(href="/register") #{t('action.register')} 
+  footer
+    p &copy; Naitei2024 Music Online
